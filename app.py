@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
@@ -9,10 +9,14 @@ def get_weather_api(city):
     r = requests.get(url).json()
     return r
 
-@app.route("/")
-def index():
-    data = (get_weather_api('Guayaquil'))
-    return render_template('index.html',context=data)
+@app.route("/", methods=['POST','GET'])
+def hello():
+    if request.method == 'POST':
+        city = str(request.form.get('txtciudad'))
+        data=get_weather_api(city)
+        return render_template('index.html', context = data)
+    else:
+        return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
