@@ -13,10 +13,17 @@ def get_weather_api(city):
 def hello():
     if request.method == 'POST':
         city = str(request.form.get('txtciudad'))
-        data=get_weather_api(city)
-        return render_template('index.html', context = data)
+        data = get_weather_api(city)
+        if 'weather' in data:
+            return render_template('index.html', context=data)
+        else:
+            return render_template('index.html', error_message='La ciudad ingresada no es correcta')
     else:
         return render_template('index.html')
+    
+@app.route('/cv')
+def cv():
+    return render_template('cv.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
